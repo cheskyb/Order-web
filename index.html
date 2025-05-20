@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Order Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Form</title>
   <style>
     body {
       font-family: sans-serif;
@@ -19,25 +19,88 @@
       margin: 10px 0;
       background: white;
     }
+    form {
+      background: white;
+      padding: 20px;
+      border: 1px solid #ccc;
+      margin-top: 30px;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background: black;
+      color: white;
+      border: none;
+    }
   </style>
 </head>
 <body>
-  <h1>Product List</h1>
+  <h1>Wholesale Product Order Form</h1>
 
   <div class="product">
-    <h3>Product Name</h3>
-    <p>Short description.</p>
-    <p>Price: $XX.XX</p>
-    <button>Order</button>
+    <h3>Side Ribbon Sweat</h3>
+    <p>Price: $45.99</p>
+    <p>Colors: Black/Combo, White/Combo</p>
   </div>
 
   <div class="product">
-    <h3>Another Product</h3>
-    <p>Another short description.</p>
-    <p>Price: $XX.XX</p>
-    <button>Order</button>
+    <h3>Heart Scuba Sweat</h3>
+    <p>Price: $42.50</p>
+    <p>Colors: Black/Pink Heart, White/Black Heart</p>
   </div>
 
-  <p style="text-align:center;">This is just a starter — real data & form will come next.</p>
+  <div class="product">
+    <h3>Denim Collared Vest Sweat</h3>
+    <p>Price: $42.50</p>
+    <p>Colors: Black/Denim, White/Denim, Black/Pink</p>
+  </div>
+
+  <form name="order-form" method="POST" data-netlify="true">
+    <h2>Place Your Order</h2>
+
+    <label>Store Name:</label>
+    <input type="text" name="storeName" required />
+
+    <label>Store Email:</label>
+    <input type="email" name="storeEmail" required />
+
+    <label>Product Name:</label>
+    <select name="product" required>
+      <option value="">-- Select a Product --</option>
+      <option>Side Ribbon Sweat</option>
+      <option>Heart Scuba Sweat</option>
+      <option>Denim Collared Vest Sweat</option>
+    </select>
+
+    <label>Color:</label>
+    <input type="text" name="color" placeholder="e.g., Black/Combo" required />
+
+    <label>Size:</label>
+    <select name="size" required>
+      <option>XXS</option>
+      <option>XS</option>
+      <option>S</option>
+      <option>M</option>
+      <option>L</option>
+      <option>XL</option>
+      <option>XXL</option>
+    </select>
+
+    <label>Quantity:</label>
+    <input type="number" name="quantity" required min="1" />
+
+    <label>Notes (optional):</label>
+    <textarea name="notes"></textarea>
+
+    <button type="submit">Submit Order</button>
+  </form>
 </body>
 </html>
