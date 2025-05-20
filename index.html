@@ -53,98 +53,22 @@
   </style>
 </head>
 <body>
+<h1>NOD NY WHOLESALE PORTAL</h1>
 
-  <h1>Wholesale Order Portal</h1>
+<h2>Place Your Order</h2>
 
-  <!-- Product List -->
-  <div id="product-list">
-    <!-- Product Template -->
-    <div class="product">
-      <h3>Side Ribbon Sweat</h3>
-      <p>Price: $45.99</p>
-      <label>Color</label>
-      <input type="text" class="color" placeholder="Black/Combo, White/Combo" />
-      <label>Size</label>
-      <select class="size">
-        <option value="XXS">XXS</option>
-        <option value="XS">XS</option>
-        <option value="S">S</option>
-        <option value="M">M</option>
-        <option value="L">L</option>
-        <option value="XL">XL</option>
-        <option value="XXL">XXL</option>
-      </select>
-      <label>Quantity</label>
-      <input type="number" class="quantity" min="1" value="1" />
-      <button onclick="addToCart('Side Ribbon Sweat', 45.99, this)">Add to Cart</button>
-    </div>
-
-    <div class="product">
-      <h3>Heart Scuba Sweat</h3>
-      <p>Price: $42.50</p>
-      <label>Color</label>
-      <input type="text" class="color" placeholder="Black/Pink Heart, White/Black Heart" />
-      <label>Size</label>
-      <select class="size">
-        <option value="XXS">XXS</option>
-        <option value="XS">XS</option>
-        <option value="S">S</option>
-        <option value="M">M</option>
-        <option value="L">L</option>
-        <option value="XL">XL</option>
-        <option value="XXL">XXL</option>
-      </select>
-      <label>Quantity</label>
-      <input type="number" class="quantity" min="1" value="1" />
-      <button onclick="addToCart('Heart Scuba Sweat', 42.50, this)">Add to Cart</button>
-    </div>
-
-    <div class="product">
-      <h3>Denim Collared Vest Sweat</h3>
-      <p>Price: $42.50</p>
-      <label>Color</label>
-      <input type="text" class="color" placeholder="Black/Denim, White/Denim, Black/Pink" />
-      <label>Size</label>
-      <select class="size">
-        <option value="XXS">XXS</option>
-        <option value="XS">XS</option>
-        <option value="S">S</option>
-        <option value="M">M</option>
-        <option value="L">L</option>
-        <option value="XL">XL</option>
-        <option value="XXL">XXL</option>
-      </select>
-      <label>Quantity</label>
-      <input type="number" class="quantity" min="1" value="1" />
-      <button onclick="addToCart('Denim Collared Vest Sweat', 42.50, this)">Add to Cart</button>
-    </div>
-  </div>
-
-  <!-- Cart + Checkout -->
-  <div class="cart">
-    <h2>Cart</h2>
-    <div id="cart-items"></div>
-    <form action="https://formspree.io/f/mjkwzzkj" method="POST">
-  <h2>Place Your Order</h2>
-
-  <label>Name:
-    <input type="text" name="customer_name" required>
-  </label><br>
-
-  <label>Email:
-    <input type="email" name="email" required>
-  </label><br>
-
+<!-- Product Selection -->
+<div>
   <label>Product:
-    <select name="product" required>
+    <select id="product">
       <option value="Side Ribbon Sweat">Side Ribbon Sweat</option>
       <option value="Heart Scuba Sweat">Heart Scuba Sweat</option>
       <option value="Denim Collared Vest Sweat">Denim Collared Vest Sweat</option>
     </select>
-  </label><br>
+  </label>
 
   <label>Color:
-    <select name="color" required>
+    <select id="color">
       <option value="Black/Combo">Black/Combo</option>
       <option value="White/Combo">White/Combo</option>
       <option value="Black/Pink Heart">Black/Pink Heart</option>
@@ -153,10 +77,10 @@
       <option value="White/Denim">White/Denim</option>
       <option value="Black/Pink">Black/Pink</option>
     </select>
-  </label><br>
+  </label>
 
   <label>Size:
-    <select name="size" required>
+    <select id="size">
       <option value="XXS">XXS</option>
       <option value="XS">XS</option>
       <option value="S">S</option>
@@ -165,53 +89,60 @@
       <option value="XL">XL</option>
       <option value="XXL">XXL</option>
     </select>
-  </label><br>
+  </label>
 
   <label>Quantity:
-    <input type="number" name="quantity" min="1" value="1" required>
+    <input type="number" id="quantity" value="1" min="1">
+  </label>
+
+  <button onclick="addToCart()">Add to Cart</button>
+</div>
+
+<!-- Cart Display -->
+<h3>Your Cart:</h3>
+<ul id="cart"></ul>
+
+<!-- Final Form -->
+<form id="orderForm" action="https://formspree.io/f/mjkwzzkj" method="POST">
+  <label>Your Name:
+    <input type="text" name="customer_name" required>
   </label><br>
 
+  <label>Your Email:
+    <input type="email" name="email" required>
+  </label><br>
+
+  <input type="hidden" name="order" id="orderData">
+
   <button type="submit">Submit Order</button>
-    </form>
-  </div>
+</form>
 
-  <script>
-    const cart = [];
-    function addToCart(name, price, button) {
-      const product = button.closest(".product");
-      const color = product.querySelector(".color").value.trim();
-      const size = product.querySelector(".size").value;
-      const qty = parseInt(product.querySelector(".quantity").value);
+<script>
+  let cartItems = [];
 
-      if (!color || qty < 1) {
-        alert("Please fill in all fields.");
-        return;
-      }
+  function addToCart() {
+    const product = document.getElementById("product").value;
+    const color = document.getElementById("color").value;
+    const size = document.getElementById("size").value;
+    const quantity = document.getElementById("quantity").value;
 
-      const item = { name, color, size, qty };
-      cart.push(item);
-      updateCart();
-    }
+    const item = `${quantity}x ${product} - ${color} - ${size}`;
+    cartItems.push(item);
+    updateCartDisplay();
+  }
 
-    function updateCart() {
-      const container = document.getElementById("cart-items");
-      const hiddenInput = document.getElementById("order-input");
-      container.innerHTML = '';
-      hiddenInput.value = '';
+  function updateCartDisplay() {
+    const cart = document.getElementById("cart");
+    cart.innerHTML = "";
+    cartItems.forEach(item => {
+      const li = document.createElement("li");
+      li.innerText = item;
+      cart.appendChild(li);
+    });
 
-      cart.forEach((item, index) => {
-        const div = document.createElement("div");
-        div.className = "cart-item";
-        div.innerHTML = `
-          <strong>${item.name}</strong><br/>
-          Size: ${item.size} <br/>
-          Color: ${item.color} <br/>
-          Quantity: ${item.qty}
-        `;
-        container.appendChild(div);
-        hiddenInput.value += `${item.name} | Size: ${item.size} | Color: ${item.color} | Qty: ${item.qty}\n`;
-      });
-    }
-  </script>
+    document.getElementById("orderData").value = cartItems.join("\n");
+  }
+</script>
+  
 </body>
 </html>
