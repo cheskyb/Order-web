@@ -124,18 +124,54 @@
   <div class="cart">
     <h2>Cart</h2>
     <div id="cart-items"></div>
-    <form action="https://formsubmit.co/cheskybrown@gmail.com" method="POST">
-      <input type="hidden" name="_subject" value="New Wholesale Order">
-      <input type="hidden" name="_cc" value="">
-      <input type="hidden" name="order" id="order-input">
-      
-      <label>Store Name</label>
-      <input type="text" name="store" required />
+    <form action="https://formspree.io/f/mjkwzzkj" method="POST">
+  <h2>Place Your Order</h2>
 
-      <label>Store Email</label>
-      <input type="email" name="email" required />
+  <label>Name:
+    <input type="text" name="customer_name" required>
+  </label><br>
 
-      <button type="submit">Submit Order</button>
+  <label>Email:
+    <input type="email" name="email" required>
+  </label><br>
+
+  <label>Product:
+    <select name="product" required>
+      <option value="Side Ribbon Sweat">Side Ribbon Sweat</option>
+      <option value="Heart Scuba Sweat">Heart Scuba Sweat</option>
+      <option value="Denim Collared Vest Sweat">Denim Collared Vest Sweat</option>
+    </select>
+  </label><br>
+
+  <label>Color:
+    <select name="color" required>
+      <option value="Black/Combo">Black/Combo</option>
+      <option value="White/Combo">White/Combo</option>
+      <option value="Black/Pink Heart">Black/Pink Heart</option>
+      <option value="White/Black Heart">White/Black Heart</option>
+      <option value="Black/Denim">Black/Denim</option>
+      <option value="White/Denim">White/Denim</option>
+      <option value="Black/Pink">Black/Pink</option>
+    </select>
+  </label><br>
+
+  <label>Size:
+    <select name="size" required>
+      <option value="XXS">XXS</option>
+      <option value="XS">XS</option>
+      <option value="S">S</option>
+      <option value="M">M</option>
+      <option value="L">L</option>
+      <option value="XL">XL</option>
+      <option value="XXL">XXL</option>
+    </select>
+  </label><br>
+
+  <label>Quantity:
+    <input type="number" name="quantity" min="1" value="1" required>
+  </label><br>
+
+  <button type="submit">Submit Order</button>
     </form>
   </div>
 
