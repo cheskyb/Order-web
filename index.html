@@ -3,104 +3,179 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Order Form</title>
+  <title>Wholesale Order Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: sans-serif;
+      font-family: 'Inter', sans-serif;
+      background: #f8f9fa;
       padding: 20px;
-      background: #f9f9f9;
+      max-width: 1000px;
+      margin: auto;
     }
     h1 {
       text-align: center;
+      margin-bottom: 40px;
     }
-    .product {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin: 10px 0;
-      background: white;
-    }
-    form {
-      background: white;
+    .product, .cart-item {
+      border: 1px solid #ddd;
       padding: 20px;
-      border: 1px solid #ccc;
-      margin-top: 30px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      background: white;
     }
     label {
       display: block;
-      margin: 10px 0 5px;
+      margin: 8px 0 4px;
     }
-    input, select, textarea {
-      width: 100%;
+    select, input {
       padding: 8px;
+      width: 100%;
       margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
     }
     button {
-      padding: 10px 20px;
       background: black;
       color: white;
+      padding: 10px 16px;
       border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .cart {
+      margin-top: 40px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
     }
   </style>
 </head>
 <body>
-  <h1>Wholesale Product Order Form</h1>
 
-  <div class="product">
-    <h3>Side Ribbon Sweat</h3>
-    <p>Price: $45.99</p>
-    <p>Colors: Black/Combo, White/Combo</p>
+  <h1>Wholesale Order Portal</h1>
+
+  <!-- Product List -->
+  <div id="product-list">
+    <!-- Product Template -->
+    <div class="product">
+      <h3>Side Ribbon Sweat</h3>
+      <p>Price: $45.99</p>
+      <label>Color</label>
+      <input type="text" class="color" placeholder="Black/Combo, White/Combo" />
+      <label>Size</label>
+      <select class="size">
+        <option value="XXS">XXS</option>
+        <option value="XS">XS</option>
+        <option value="S">S</option>
+        <option value="M">M</option>
+        <option value="L">L</option>
+        <option value="XL">XL</option>
+        <option value="XXL">XXL</option>
+      </select>
+      <label>Quantity</label>
+      <input type="number" class="quantity" min="1" value="1" />
+      <button onclick="addToCart('Side Ribbon Sweat', 45.99, this)">Add to Cart</button>
+    </div>
+
+    <div class="product">
+      <h3>Heart Scuba Sweat</h3>
+      <p>Price: $42.50</p>
+      <label>Color</label>
+      <input type="text" class="color" placeholder="Black/Pink Heart, White/Black Heart" />
+      <label>Size</label>
+      <select class="size">
+        <option value="XXS">XXS</option>
+        <option value="XS">XS</option>
+        <option value="S">S</option>
+        <option value="M">M</option>
+        <option value="L">L</option>
+        <option value="XL">XL</option>
+        <option value="XXL">XXL</option>
+      </select>
+      <label>Quantity</label>
+      <input type="number" class="quantity" min="1" value="1" />
+      <button onclick="addToCart('Heart Scuba Sweat', 42.50, this)">Add to Cart</button>
+    </div>
+
+    <div class="product">
+      <h3>Denim Collared Vest Sweat</h3>
+      <p>Price: $42.50</p>
+      <label>Color</label>
+      <input type="text" class="color" placeholder="Black/Denim, White/Denim, Black/Pink" />
+      <label>Size</label>
+      <select class="size">
+        <option value="XXS">XXS</option>
+        <option value="XS">XS</option>
+        <option value="S">S</option>
+        <option value="M">M</option>
+        <option value="L">L</option>
+        <option value="XL">XL</option>
+        <option value="XXL">XXL</option>
+      </select>
+      <label>Quantity</label>
+      <input type="number" class="quantity" min="1" value="1" />
+      <button onclick="addToCart('Denim Collared Vest Sweat', 42.50, this)">Add to Cart</button>
+    </div>
   </div>
 
-  <div class="product">
-    <h3>Heart Scuba Sweat</h3>
-    <p>Price: $42.50</p>
-    <p>Colors: Black/Pink Heart, White/Black Heart</p>
+  <!-- Cart + Checkout -->
+  <div class="cart">
+    <h2>Cart</h2>
+    <div id="cart-items"></div>
+    <form action="https://formsubmit.co/cheskybrown@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="New Wholesale Order">
+      <input type="hidden" name="_cc" value="">
+      <input type="hidden" name="order" id="order-input">
+      
+      <label>Store Name</label>
+      <input type="text" name="store" required />
+
+      <label>Store Email</label>
+      <input type="email" name="email" required />
+
+      <button type="submit">Submit Order</button>
+    </form>
   </div>
 
-  <div class="product">
-    <h3>Denim Collared Vest Sweat</h3>
-    <p>Price: $42.50</p>
-    <p>Colors: Black/Denim, White/Denim, Black/Pink</p>
-  </div>
+  <script>
+    const cart = [];
+    function addToCart(name, price, button) {
+      const product = button.closest(".product");
+      const color = product.querySelector(".color").value.trim();
+      const size = product.querySelector(".size").value;
+      const qty = parseInt(product.querySelector(".quantity").value);
 
-  <form name="order-form" method="POST" data-netlify="true">
-    <h2>Place Your Order</h2>
+      if (!color || qty < 1) {
+        alert("Please fill in all fields.");
+        return;
+      }
 
-    <label>Store Name:</label>
-    <input type="text" name="storeName" required />
+      const item = { name, color, size, qty };
+      cart.push(item);
+      updateCart();
+    }
 
-    <label>Store Email:</label>
-    <input type="email" name="storeEmail" required />
+    function updateCart() {
+      const container = document.getElementById("cart-items");
+      const hiddenInput = document.getElementById("order-input");
+      container.innerHTML = '';
+      hiddenInput.value = '';
 
-    <label>Product Name:</label>
-    <select name="product" required>
-      <option value="">-- Select a Product --</option>
-      <option>Side Ribbon Sweat</option>
-      <option>Heart Scuba Sweat</option>
-      <option>Denim Collared Vest Sweat</option>
-    </select>
-
-    <label>Color:</label>
-    <input type="text" name="color" placeholder="e.g., Black/Combo" required />
-
-    <label>Size:</label>
-    <select name="size" required>
-      <option>XXS</option>
-      <option>XS</option>
-      <option>S</option>
-      <option>M</option>
-      <option>L</option>
-      <option>XL</option>
-      <option>XXL</option>
-    </select>
-
-    <label>Quantity:</label>
-    <input type="number" name="quantity" required min="1" />
-
-    <label>Notes (optional):</label>
-    <textarea name="notes"></textarea>
-
-    <button type="submit">Submit Order</button>
-  </form>
+      cart.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+          <strong>${item.name}</strong><br/>
+          Size: ${item.size} <br/>
+          Color: ${item.color} <br/>
+          Quantity: ${item.qty}
+        `;
+        container.appendChild(div);
+        hiddenInput.value += `${item.name} | Size: ${item.size} | Color: ${item.color} | Qty: ${item.qty}\n`;
+      });
+    }
+  </script>
 </body>
 </html>
